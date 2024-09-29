@@ -1,0 +1,31 @@
+{
+  "name": "react-microfrontend-cli",
+  "version": "1.0.5",
+  "description": "A CLI tool to scaffold a React app with microfrontend architecture using TypeScript and SCSS",
+  "main": "index.js",
+  "type": "module",
+  "bin": {
+    "react-microfrontend": "./index.js"
+  },
+  "dependencies": {
+    "commander": "^10.0.0",
+    "inquirer": "^9.0.0",
+    "ejs": "^3.1.6",
+    "fs-extra": "^11.1.0",
+    "shelljs": "^0.8.5",
+    "url": "^0.11.4",
+    "ora": "^8.1.0"
+  },
+  "devDependencies": {},
+  "keywords": [
+    "react",
+    "microfrontend",
+    "typescript",
+    "scss",
+    "webpack",
+    "cli",
+    "scaffold"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
+}

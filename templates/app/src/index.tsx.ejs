@@ -1,0 +1,19 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+// Dynamically load micro frontends using Webpack Module Federation
+<%- microfrontends.reduce((acc, mf, index) => {
+  return acc + `const Microfrontend${index+1} = React.lazy(() => import('${mf.name}/App'));\n`;
+}, '') %>
+const App = () => (
+  <React.Suspense fallback="Loading Microfrontends...">
+    <div>
+      <h1>Main Application</h1>
+      <%- microfrontends.reduce((acc, mf, index) => {
+        return acc + `<Microfrontend${index+1} />\n`;
+      }, '') %>
+    </div>
+  </React.Suspense>
+);
+
+ReactDOM.render(<App />, document.getElementById('root'));

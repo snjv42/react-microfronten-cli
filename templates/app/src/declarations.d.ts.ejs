@@ -1,0 +1,7 @@
+<%- microfrontends.reduce((acc, mf, index) => {
+  return acc + `declare module '${mf.name}/App' {
+    const App: React.ComponentType;
+    export default App;
+  }
+\n`;
+}, '') %>

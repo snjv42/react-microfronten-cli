@@ -1,0 +1,44 @@
+<%
+  // Generate the start scripts for each micro frontend
+  const startScripts = microfrontends.reduce((acc, mf, index) => {
+    acc[`start:${mf.name}`] = `cd ${mf.name} && npm start`;
+    return acc;
+  }, {});
+
+  // Add the start script for the host
+  startScripts['start:${appName}'] = 'npm start';
+
+  // Add the start:all script
+  startScripts['start:all'] = `concurrently ${microfrontends.map(mf => `\\"npm run start:${mf.name}\\"`).join(' ')} \\"npm run start:${appName}\\"`;
+%>
+{
+    "name": "<%= appName %>",
+    "version": "1.0.0",
+    "scripts": {
+      <%- Object.entries(startScripts).map(([key, value]) => {
+        return `"${key}": "${value}"`;
+      }).join(',\n      ') %>
+      "start:<%- appName %>": "npm start",
+      "start": "webpack serve --mode development",
+      "build": "webpack --mode production"
+    },
+    "dependencies": {
+      "react": "^18.0.0",
+      "react-dom": "^18.0.0"
+    },
+    "devDependencies": {
+      "@types/react-dom": "^18.3.0",
+      "concurrently": "^9.0.1",
+      "html-webpack-plugin": "^5.0.0",
+      "css-loader": "^5.0.0",
+      "sass": "^1.32.0",
+      "sass-loader": "^10.0.0",
+      "style-loader": "^2.0.0",
+      "ts-loader": "^8.0.0",
+      "typescript": "^4.0.0",
+      "webpack": "^5.0.0",
+      "webpack-cli": "^4.0.0",
+      "webpack-dev-server": "^4.0.0"
+    }
+  }
+  

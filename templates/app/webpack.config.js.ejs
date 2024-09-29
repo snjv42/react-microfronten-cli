@@ -1,0 +1,50 @@
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { ModuleFederationPlugin } = require('webpack').container;
+
+module.exports = {
+  entry: './src/index',
+  output: {
+    filename: 'bundle.js',
+    path: path.resolve(__dirname, 'dist'),
+    publicPath: 'auto',
+  },
+  resolve: {
+    extensions: ['.ts', '.tsx', '.js'],
+  },
+  module: {
+    rules: [
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      },
+      {
+        test: /\.scss$/,
+        use: ['style-loader', 'css-loader', 'sass-loader'],
+      },
+    ],
+  },
+  devServer: {
+    static: {
+      directory: path.join(__dirname, 'public'), // Updated to 'static.directory'
+    },
+    port: 4000,
+    historyApiFallback: true, // Important for React Router and client-side routing
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './public/index.html', // Points to your EJS or HTML template
+    }),
+    new ModuleFederationPlugin({
+      name: '<%= appName %>',
+      remotes: {
+        <%- microfrontends.reduce((acc, mf) => {
+          return `${acc}${mf.name}: '${mf.name}@http://localhost:${mf.port}/remoteEntry.js',\n`;
+        }, '') %>
+      },
+      shared: { react: { singleton: true, eager: true }, 'react-dom': { singleton: true, eager: true } },
+    }),
+  ],
+  mode: 'development',
+};
